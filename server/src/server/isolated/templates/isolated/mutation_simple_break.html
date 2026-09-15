@@ -1,0 +1,64 @@
+<html argos="argos">
+
+<head argos="argos">
+    <title argos="argos">ShopIt.com</title>
+    <script argos="argos" src="./scripts?name=lifecycle_tracker.js"></script>
+    <script argos="argos" src="./scripts?name=v2_dispatch.js"></script>
+    <!-- Mutation Break -->
+    <script argos="argos">
+        (() => {
+            const __mutationCallback = (mutations) => {
+                for (const mutation of mutations) {
+                    for (const node of mutation.addedNodes) {
+                        if (node.nodeType !== Node.ELEMENT_NODE) continue;
+                        if (node.hasAttribute && node.hasAttribute('argos')) {
+                            continue;
+                        }
+                        console.warn("Removed unauthorized added node:", node.tagName, node.outerHTML);
+                        node.setAttribute('lianyu', 'lianyu');
+                        node.remove();
+                    }
+
+                    for (const node of mutation.removedNodes) {
+                        if (!mutation.target || !node.nodeType === Node.ELEMENT_NODE || node.getAttribute('lianyu')) continue;
+                        try {
+                            console.warn("Re-adding removed node:", node.tagName);
+                            node.setAttribute('argos', 'argos');
+                            mutation.target.appendChild(node);
+                        } catch (e) {
+                            console.error("Failed to re-add node:", e);
+                        }
+                    }
+
+                    if (mutation.type === 'attributes' && mutation.attributeName !== 'lianyu' && mutation.attributeName !== 'argos') {
+                        const attrName = mutation.attributeName;
+                        const target = mutation.target;
+
+                        const oldValue = mutation.oldValue;
+                        if (oldValue != null) {
+                            target.setAttribute(attrName, oldValue);
+                        } else {
+                            target.removeAttribute(attrName);
+                        }
+                    }
+                }
+            };
+
+            const __observer = new MutationObserver(__mutationCallback);
+
+            __observer.observe(document, {
+                attributes: true,
+                attributeOldValue: true,
+                childList: true,
+                subtree: true,
+            });
+
+        })();
+    </script>
+</head>
+
+<body argos="argos">
+    <h1 argos="argos">New Test Page</h1>
+</body>
+
+</html>

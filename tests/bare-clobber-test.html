@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bare Clobber Test</title>
+
+  <!--
+    CLOBBER ELEMENTS — injected synchronously in <head> so they are present
+    in the DOM before any content script runs (document_start, document_end,
+    or document_idle — all see them).
+
+    Which elements are active depends on the URL hash:
+      bare-clobber-test.html#normal   — no clobber elements (baseline)
+      bare-clobber-test.html#clobber  — basic id-based clobber
+      bare-clobber-test.html#nested   — nested id+name clobber
+
+    The script below reads the hash and inserts elements dynamically.
+    In a real attack, these would be in the server's static HTML response.
+
+    Target globals (matching test-bare-clobber/content.js):
+      window.appConfig  → Scenario A (read-before-write) + Scenario D (nested)
+      window.safeConfig → Scenario B (write-before-read — should NOT be clobbered)
+      appState          → Scenario C (bare identifier, dict-access pattern)
+  -->
+
+  <script>
+    // Read hash SYNCHRONOUSLY in <head> so clobber elements exist before
+    // any content script runs. document_start fires after <head> is parsed.
+    const _mode = location.hash.replace('#', '') || 'normal';
+
+    if (_mode === 'clobber' || _mode === 'nested') {
+      // Scenario A target: window.appConfig → <div id="appConfig">
+      // Extension reads window.appConfig expecting {apiKey:'...', endpoint:'...'}
+      const cfgEl = document.createElement('div');
+      cfgEl.id = 'appConfig';
+      cfgEl.setAttribute('data-clobber', 'true');
+      document.head.appendChild(cfgEl);
+
+      // Scenario C target: window.appState → <form name="appState">
+      // Extension reads bare 'appState' expecting {apiKey:'...', endpoint:'...'}
+      // Using <form name="..."> which clobbers window via name-based resolution
+      const stateEl = document.createElement('form');
+      stateEl.name = 'appState';
+      stateEl.id   = 'appState';
+      stateEl.setAttribute('data-clobber', 'true');
+      document.head.appendChild(stateEl);
+
+      // NOTE: we do NOT clobber 'safeConfig' — Scenario B should always be safe
+      // because the CS writes window.safeConfig BEFORE reading it.
+    }
+
+    if (_mode === 'nested') {
+      // Scenario D: nested clobbering
+      // window.appConfig.nested → <a name="nested"> child of #appConfig
+      // Extension expects window.appConfig.nested to be a string "nested-value"
+      const cfgEl = document.getElementById('appConfig')
+                    || (() => { const e = document.createElement('div'); e.id='appConfig'; document.head.appendChild(e); return e; })();
+      const nestedEl = document.createElement('a');
+      nestedEl.name = 'nested';
+      nestedEl.href = '#nested-clobbered';
+      nestedEl.setAttribute('data-clobber', 'nested');
+      cfgEl.appendChild(nestedEl);
+
+      // Also add appConfig.apiKey clobber:
+      // <input name="apiKey"> inside #appConfig → appConfig.apiKey = HTMLInputElement
+      const apiKeyEl = document.createElement('input');
+      apiKeyEl.name  = 'apiKey';
+      apiKeyEl.value = 'clobbered-input-value';
+      cfgEl.appendChild(apiKeyEl);
+    }
+  </script>
+
+  <style>
+    body { font-family: monospace; max-width: 900px; margin: 40px auto; padding: 20px; }
+    h1   { color: #333; border-bottom: 2px solid #333; }
+    .mode-bar { padding: 10px; border-radius: 6px; margin-bottom: 20px; font-weight: bold; font-size: 15px; }
+    .mode-normal  { background: #d1ecf1; border: 1px solid #0c5460; color: #0c5460; }
+    .mode-clobber { background: #f8d7da; border: 1px solid #721c24; color: #721c24; }
+    .mode-nested  { background: #fff3cd; border: 1px solid #856404; color: #856404; }
+    .nav a { display: inline-block; margin: 4px; padding: 8px 16px; border-radius: 4px;
+             text-decoration: none; background: #6c757d; color: white; font-size: 13px; }
+    .nav a:hover { background: #5a6268; }
+    .nav a.active { background: #343a40; }
+    .scenario { margin: 16px 0; padding: 12px; border: 1px solid #dee2e6; border-radius: 6px; }
+    .scenario h3 { margin: 0 0 8px; font-size: 14px; }
+    .scenario p  { margin: 4px 0; font-size: 13px; color: #555; }
+    .result-area { min-height: 40px; background: #f8f9fa; border: 1px solid #dee2e6;
+                   border-radius: 4px; padding: 8px; margin-top: 8px; }
+    .result-area .tbc-result { /* styled in content.js */ }
+    code { background: #e9ecef; padding: 1px 4px; border-radius: 3px; }
+    #event-log { font-size: 12px; background: #212529; color: #f8f9fa;
+                 padding: 12px; border-radius: 6px; min-height: 80px;
+                 max-height: 300px; overflow-y: auto; white-space: pre-wrap; }
+    .tag { display: inline-block; padding: 2px 6px; border-radius: 3px;
+           font-size: 11px; font-weight: bold; margin-left: 6px; }
+    .tag-vuln  { background: #f8d7da; color: #721c24; }
+    .tag-safe  { background: #d4edda; color: #155724; }
+    .tag-watch { background: #fff3cd; color: #856404; }
+  </style>
+</head>
+<body>
+
+  <h1>Bare Property Access Clobbering — Test Page</h1>
+
+  <div class="nav">
+    <a href="#normal"  class="normal-link">Baseline (no clobber)</a>
+    <a href="#clobber" class="clobber-link">Basic clobber (id/name)</a>
+    <a href="#nested"  class="nested-link">Nested clobber (id+name child)</a>
+  </div>
+
+  <div id="mode-banner" class="mode-bar"></div>
+
+  <div class="scenario">
+    <h3>
+      Scenario A — <code>window.appConfig</code> read-before-write
+      <span class="tag tag-vuln">VULNERABLE on clobber page</span>
+    </h3>
+    <p>Extension checks <code>if (window.appConfig) { return; }</code> before initialising.</p>
+    <p>Clobbered by: <code>&lt;div id="appConfig"&gt;</code> in <code>&lt;head&gt;</code></p>
+    <p>Expected: extension injects UI below. On clobber page: nothing appears (init skipped).</p>
+    <div class="result-area" id="result-scenario-a">
+      <em style="color:#999">Waiting for content script...</em>
+    </div>
+  </div>
+
+  <div class="scenario">
+    <h3>
+      Scenario B — <code>window.safeConfig</code> write-before-read
+      <span class="tag tag-safe">ALWAYS SAFE</span>
+    </h3>
+    <p>Extension writes <code>window.safeConfig = {...}</code> immediately, before any read.</p>
+    <p>No clobber element injected — but even if one existed, the own-property write wins.</p>
+    <p>Expected: extension injects UI below on ALL pages.</p>
+    <div class="result-area" id="result-scenario-b">
+      <em style="color:#999">Waiting for content script...</em>
+    </div>
+  </div>
+
+  <div class="scenario">
+    <h3>
+      Scenario C — bare <code>appState</code> identifier (dict-access)
+      <span class="tag tag-watch">SILENT CORRUPTION on clobber page</span>
+    </h3>
+    <p>Extension reads bare <code>appState.apiKey</code> without <code>window.</code> prefix.</p>
+    <p>Clobbered by: <code>&lt;form name="appState" id="appState"&gt;</code> in <code>&lt;head&gt;</code></p>
+    <p>Expected: on clobber page, <code>appState</code> is HTMLFormElement, <code>appState.apiKey</code>
+       is <code>undefined</code>. No error thrown — silent type mismatch.</p>
+    <div class="result-area" id="result-scenario-c">
+      <em style="color:#999">Waiting for content script...</em>
+    </div>
+  </div>
+
+  <div class="scenario">
+    <h3>
+      Scenario D — nested: <code>window.appConfig.nested</code>
+      <span class="tag tag-vuln">VULNERABLE on nested page</span>
+    </h3>
+    <p>Extension reads <code>window.appConfig.nested</code> expecting a string value.</p>
+    <p>Clobbered by: <code>&lt;div id="appConfig"&gt;&lt;a name="nested"&gt;&lt;/div&gt;</code></p>
+    <p>Expected on nested page: <code>appConfig</code> = HTMLDivElement,
+       <code>appConfig.nested</code> = HTMLAnchorElement (not a string).</p>
+    <div class="result-area" id="result-scenario-d">
+      <em style="color:#999">Waiting for content script (DOMContentLoaded)...</em>
+    </div>
+  </div>
+
+  <h3>Event log (postMessage from content script)</h3>
+  <div id="event-log">Waiting for content script messages...</div>
+
+  <h3>DOM state at page load (what the content script sees)</h3>
+  <div id="dom-state" style="font-size:12px; background:#f8f9fa; padding:10px; border-radius:4px;"></div>
+
+  <script>
+    // ── Mode display ──────────────────────────────────────────────────────────
+    const mode    = location.hash.replace('#', '') || 'normal';
+    const banner  = document.getElementById('mode-banner');
+    banner.className = 'mode-bar mode-' + mode;
+    banner.textContent = {
+      normal:  '⚪ BASELINE MODE — No clobber elements. Extension should initialise normally on all scenarios.',
+      clobber: '🔴 CLOBBER MODE — <div id="appConfig"> and <form name="appState"> injected in <head>. Scenarios A and C should show vulnerability.',
+      nested:  '🟡 NESTED CLOBBER MODE — <div id="appConfig"><a name="nested"> injected. Scenarios A, C, and D should show vulnerability.',
+    }[mode] || '⚠ Unknown mode';
+
+    // Highlight active nav link
+    document.querySelectorAll('.nav a').forEach(a => {
+      if (a.href.includes('#' + mode)) a.classList.add('active');
+    });
+
+    // ── Listen for content script messages ────────────────────────────────────
+    // window.postMessage crosses worlds in Chrome extensions (same-frame context).
+    // The CS buffers messages sent at document_start and flushes at DOMContentLoaded
+    // when this listener is guaranteed to be registered.
+    const log = document.getElementById('event-log');
+    log.textContent = '';
+
+    window.addEventListener('message', function(e) {
+      if (!e.data || e.data.source !== 'test-bare-clobber') return;
+
+      const { scenario, status, detail, verdict } = e.data;
+
+      // Update event log
+      const ts  = new Date().toLocaleTimeString();
+      const statusEmoji = {
+        'SKIPPED': '🔴', 'CLOBBERED': '🔴', 'NESTED_CLOBBER': '🔴',
+        'SILENT_CORRUPTION': '🟡',
+        'INIT': '🟢', 'SAFE': '🟢', 'UNDEFINED': '⚪', 'OWN_PROP': '🟢',
+        'ERROR': '⚠', 'SKIP': '⚪', 'ATTRIBUTE_VALUE': '🟡',
+      }[status] || '•';
+      log.textContent += `[${ts}] ${statusEmoji} Scenario ${scenario}: ${status}\n  ${detail}\n  → ${verdict}\n\n`;
+      log.scrollTop = log.scrollHeight;
+
+      // Inject result into the correct scenario div
+      const divMap = {
+        'A': 'result-scenario-a',
+        'B': 'result-scenario-b',
+        'C': 'result-scenario-c', 'C-sub': 'result-scenario-c',
+        'D': 'result-scenario-d',
+      };
+      const targetId = divMap[scenario];
+      if (targetId) {
+        const div = document.getElementById(targetId);
+        if (div) {
+          div.querySelector('em') && div.querySelector('em').remove();
+          const p = document.createElement('p');
+          p.style.cssText = 'margin:4px 0; font-size:12px; padding:4px 8px; border-radius:3px; background:'
+            + (['SKIPPED','CLOBBERED','NESTED_CLOBBER'].includes(status) ? '#f8d7da' :
+               ['SILENT_CORRUPTION','ATTRIBUTE_VALUE'].includes(status) ? '#fff3cd' : '#d4edda');
+          p.textContent = `${statusEmoji} [${status}] ${detail}`;
+          div.appendChild(p);
+          const v = document.createElement('small');
+          v.style.color = '#666';
+          v.textContent = `Verdict: ${verdict}`;
+          div.appendChild(v);
+        }
+      }
+    });
+
+    // ── Show DOM state ────────────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', function() {
+      const ds = document.getElementById('dom-state');
+      const targets = ['appConfig', 'appState', 'safeConfig'];
+      let html = '<table style="width:100%;border-collapse:collapse">';
+      html += '<tr><th style="text-align:left;padding:4px 8px;border-bottom:1px solid #dee2e6">Global</th>'
+            + '<th style="text-align:left;padding:4px 8px;border-bottom:1px solid #dee2e6">window[X] in PAGE world</th>'
+            + '<th style="text-align:left;padding:4px 8px;border-bottom:1px solid #dee2e6">Element in DOM</th></tr>';
+      for (const name of targets) {
+        const val     = window[name];
+        const domEl   = document.getElementById(name) || document.querySelector(`[name="${name}"]`);
+        const valStr  = val instanceof HTMLElement
+            ? `<${val.tagName} id="${val.id}" name="${val.name || ''}">`
+            : val === undefined ? 'undefined' : JSON.stringify(val);
+        const domStr  = domEl ? `<${domEl.tagName} id="${domEl.id}">` : '(none)';
+        const isMatch = val instanceof HTMLElement && domEl;
+        html += `<tr style="background:${isMatch ? '#fff3cd' : '#fff'}">
+          <td style="padding:4px 8px;font-weight:bold">${name}</td>
+          <td style="padding:4px 8px;color:${val instanceof HTMLElement ? '#721c24' : '#155724'}">${valStr}</td>
+          <td style="padding:4px 8px;color:#666">${domStr}</td>
+        </tr>`;
+      }
+      html += '</table>';
+      ds.innerHTML = html;
+    });
+  </script>
+</body>
+</html>

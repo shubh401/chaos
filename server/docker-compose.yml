@@ -1,0 +1,28 @@
+services:
+  web:
+    build: ./src
+    command: gunicorn --config=gunicorn.conf.py --bind 0.0.0.0:9000
+    volumes:
+      - ./src/server:/usr/src/app
+      - ../crawler/logs/:/var/logs:rw
+    expose:
+      - 9000
+    restart: unless-stopped
+  nginx:
+    build: ./nginx
+    sysctls:
+      net.ipv4.ip_local_port_range: "8999 65535"
+    ports:
+      - 9000:80
+      - 9010:443
+    extra_hosts:
+      - "testserver.com:127.0.0.1"
+    volumes:
+      - ./cert:/etc/letsencrypt:rw
+      - ../crawler/logs/:/var/logs:rw
+    depends_on:
+      - web
+
+networks:
+  mynetwork:
+    driver: bridge

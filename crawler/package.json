@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "fs": "^0.0.1-security",
+    "playwright": "^1.59.1",
+    "tcp-port-used": "^1.0.2",
+    "web-ext": "^8.4.0",
+    "xmlhttprequest": "^1.8.0"
+  }
+}

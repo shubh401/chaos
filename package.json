@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "@babel/parser": "^7.28.0",
+    "@babel/traverse": "^7.28.0",
+    "acorn-loose": "^8.5.2",
+    "chalk": "^5.5.0",
+    "commander": "^14.0.0",
+    "dotenv": "^16.4.7",
+    "escodegen": "^2.1.0",
+    "eslint-scope": "^8.4.0",
+    "estraverse": "^5.3.0",
+    "n": "^10.2.0",
+    "playwright": "^1.56.1",
+    "tcp-port-used": "^1.0.2",
+    "unzip-crx-3": "^0.2.0",
+    "web-ext": "^8.4.0",
+    "xmlhttprequest": "^1.8.0"
+  },
+  "devDependencies": {
+    "acorn": "^8.15.0",
+    "acorn-walk": "^8.3.4"
+  }
+}

@@ -1,0 +1,8 @@
+*.DS_Store
+*.venv
+.env
+node_modules/
+__pycache__/
+*.pyc
+server/cert/*.crt
+server/cert/*.key

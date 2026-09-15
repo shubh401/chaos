@@ -1,0 +1,74 @@
+{
+    "shared": {
+        "simple": [
+            "https://testserver.com:9010/shared/?template=hook_simple.html",
+            "https://testserver.com:9010/shared/?template=hook_simple_break.html",
+            "https://testserver.com:9010/shared/?template=raider_simple.html",
+            "https://testserver.com:9010/shared/?template=raider_simple_break.html",
+            "https://testserver.com:9010/shared/?template=mutation_simple.html",
+            "https://testserver.com:9010/shared/?template=proto_poison_simple.html",
+            "https://testserver.com:9010/shared/?template=proto_poison_simple_break.html",
+            "https://testserver.com:9010/shared/?template=event_swallow_simple.html",
+            "https://testserver.com:9010/shared/?template=event_swallow_simple_break.html",
+            "https://testserver.com:9010/shared/?template=global_preassign_simple.html",
+            "https://testserver.com:9010/shared/?template=global_preassign_simple_break.html",
+            "https://testserver.com:9010/shared/?template=promise_poison_simple.html",
+            "https://testserver.com:9010/shared/?template=promise_poison_simple_break.html",
+            "https://testserver.com:9010/shared/?template=eval_poison_simple.html",
+            "https://testserver.com:9010/shared/?template=eval_poison_simple_break.html"
+        ],
+        "proto": [
+            "https://testserver.com:9010/shared/?template=proto_poison_simple.html",
+            "https://testserver.com:9010/shared/?template=proto_poison_simple_break.html"
+        ],
+        "honey": [
+            "http://testserver.com:9000/shared/?template=hook.html",
+            "http://testserver.com:9000/shared/?template=raider.html",
+            "http://testserver.com:9000/shared/?template=mutation.html",
+            "https://testserver.com:9010/shared/?template=hook.html",
+            "https://testserver.com:9010/shared/?template=raider.html",
+            "https://testserver.com:9010/shared/?template=mutation.html",
+            "http://testserver.com:9000/shared/?template=hook_break.html",
+            "http://testserver.com:9000/shared/?template=raider_break.html",
+            "https://testserver.com:9010/shared/?template=hook_break.html",
+            "https://testserver.com:9010/shared/?template=raider_break.html"
+        ]
+    },
+    "isolated": {
+        "simple": [
+            "http://testserver.com:9000/isolated/?template=raider_simple.html",
+            "http://testserver.com:9000/isolated/?template=mutation_simple.html",
+            "https://testserver.com:9010/isolated/?template=raider_simple.html",
+            "https://testserver.com:9010/isolated/?template=mutation_simple.html"
+        ],
+        "clobber": [
+            "https://testserver.com:9010/isolated/?template=raider_simple.html",
+            "https://testserver.com:9010/isolated/?template=mutation_simple.html",
+            "https://testserver.com:9010/isolated/?template=clobber_proxy_simple.html",
+            "https://testserver.com:9010/isolated/?template=clobber_payload&type=targeted"
+        ],
+        "honey": [
+            "http://testserver.com:9000/isolated/?template=raider.html",
+            "http://testserver.com:9000/isolated/?template=mutation.html",
+            "https://testserver.com:9010/isolated/?template=raider.html",
+            "https://testserver.com:9010/isolated/?template=mutation.html"
+        ],
+        "clobber_targeted": [
+            "https://testserver.com:9010/isolated/?template=clobber_payload&type=targeted"
+        ],
+        "clobber_taint": [
+            "https://testserver.com:9010/isolated/?template=clobber_payload&type=baseline",
+            "https://testserver.com:9010/isolated/?template=clobber_payload&type=targeted"
+        ],
+        "clobber_trigger": [
+            "https://testserver.com:9010/isolated/?template=clobber_payload&type=trigger",
+            "https://testserver.com:9010/isolated/?template=clobber_payload&type=targeted"
+        ],
+        "clobber_gbs_trace": [
+            "https://testserver.com:9010/isolated/?template=clobber_payload&type=baseline"
+        ],
+        "clobber_gbs_attack": [
+            "https://testserver.com:9010/isolated/?template=clobber_gbs_payload"
+        ]
+    }
+}

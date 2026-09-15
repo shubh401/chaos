@@ -1,0 +1,20 @@
+{
+  "name": "static_analyzer",
+  "version": "1.0.0",
+  "description": "Static Filtering Component",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "\\"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "acorn-loose": "^8.4.0",
+    "escodegen": "^2.1.0",
+    "fs": "^0.0.1-security",
+    "unzip-crx-3": "^0.2.0"
+  }
+}

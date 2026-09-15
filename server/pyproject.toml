@@ -1,0 +1,36 @@
+[project]
+name = "server"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aiohttp>=3.13.5",
+    "aiosignal>=1.4.0",
+    "asgiref>=3.11.1",
+    "async-timeout>=5.0.1",
+    "attrs>=26.1.0",
+    "cffi>=2.0.0",
+    "charset-normalizer>=3.4.7",
+    "cryptography>=46.0.7",
+    "django>=6.0.4",
+    "dotenv>=0.9.9",
+    "frozenlist>=1.8.0",
+    "greenlet>=3.4.0",
+    "gunicorn>=25.3.0",
+    "idna>=3.11",
+    "markupsafe>=3.0.3",
+    "multidict>=6.7.1",
+    "protobuf>=7.34.1",
+    "psycopg>=3.3.3",
+    "psycopg-pool>=3.3.0",
+    "psycopg2-binary>=2.9.11",
+    "pycparser>=3.0",
+    "pyee>=13.0.1",
+    "pyopenssl>=26.0.0",
+    "pyyaml>=6.0.3",
+    "six>=1.17.0",
+    "sqlparse>=0.5.5",
+    "typing-extensions>=4.15.0",
+    "yarl>=1.23.0",
+]

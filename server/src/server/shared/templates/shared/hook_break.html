@@ -1,0 +1,832 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>ShopIt.com</title>
+
+    <!-- Basic CSS -->
+    <style>
+      /* Reset CSS */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Global Styles */
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+      }
+
+      /* Header Styles */
+      header {
+        background-color: #343a40;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+      }
+
+      header nav ul {
+        list-style-type: none;
+      }
+
+      header nav ul li {
+        display: inline;
+        margin: 0 10px;
+      }
+
+      header nav ul li a {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      /* Main Sections */
+      section {
+        padding: 50px 0;
+        text-align: center;
+      }
+
+      .bg-light {
+        background-color: #f8f9fa;
+      }
+
+      /* Form Styles */
+      form {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      input[type="email"],
+      input[type="current-password"],
+      input[type="password"] {
+        width: 100%;
+        margin-bottom: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      /* Footer Styles */
+      footer {
+        background-color: #343a40;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+      }
+    </style>
+
+    <script src="./scripts?name=lifecycle_tracker.js"></script>
+    <script src="./scripts?name=mutation_hashes.js"></script>
+
+    <!-- JavaScript API & Property Hooks -->
+    <script src="./scripts?name=hook_break.js"></script>
+
+    <!-- Mutation Observer -->
+    <script src="./scripts?name=mo.js"></script>
+  </head>
+
+  <body>
+    <header class="bg-dark text-white py-4">
+      <div class="container text-center">
+        <h1 class="display-4">ShopIt.com</h1>
+        <nav
+          class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-center"
+        >
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Contact</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section id="login" class="bg-light py-5">
+      <div class="container">
+        <h2 class="text-center mb-4">Login</h2>
+        <div class="row justify-content-center">
+          <div class="col-md-6" id="div_login">
+            <form id="form_login">
+              <div class="form-group">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="Enter email"
+                  autocomplete="username"
+                />
+              </div>
+              <div class="form-group">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  placeholder="Password"
+                  autocomplete="current-password"
+                />
+              </div>
+              <button
+                type="submit"
+                id="form_submit"
+                class="btn btn-primary btn-block"
+              >
+                Login
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="section" class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-4">Section</h2>
+        <div class="row">
+          <div class="col-md-6">
+            <h3>Article</h3>
+            <p id="en-text" lang="en">This is English dummy text.</p>
+          </div>
+          <div class="col-md-6">
+            <h3>Aside</h3>
+            <p id="fr-text" lang="fr">Voici un texte fictif en français.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="figure" class="py-5 bg-light">
+      <div class="container">
+        <h2 class="text-center mb-4">Figure</h2>
+        <div class="row">
+          <div class="col-md-4 offset-md-4 text-center">
+            <img
+              id="img_elm"
+              src="./images?name=mj0.jpg"
+              alt="Placeholder Image"
+              width="250"
+              height="250"
+              class="img-fluid mb-3"
+            />
+            <p>This is a caption for the image.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="main" class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-4">Main Content Area</h2>
+        <div class="content text-center">
+          <a
+            id="first-party"
+            href="./product.html"
+            target="_blank"
+            rel="noreferrer"
+            >See Products.</a
+          >
+        </div>
+        <div class="content text-center">
+          <a
+            id="third-party-safe"
+            href="https://www.example.com"
+            target="_blank"
+            rel="noreferrer"
+            >Test Products.</a
+          >
+        </div>
+
+        <div class="content text-center">
+          <a
+            id="third-party-unsafe"
+            href="https://br-icloud.com.br"
+            target="_blank"
+            rel="noreferrer"
+            >Compare Products</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section id="dummy-text" class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-4">
+          Dummy Text Content in Different Languages
+        </h2>
+        <div class="row">
+          <div class="col-md-6 offset-md-3">
+            <p id="vt-text" lang="vt">Đây là văn bản giả không có ý nghĩa.</p>
+            <p id="de-text" lang="de">Das ist ein fiktiver Text auf Deutsch.</p>
+            <p id="it-text" lang="it">
+              Questo è un testo fittizio in italiano.
+            </p>
+            <p id="ja-text" lang="ja">これは日本語のダミーテキストです。</p>
+            <p id="ru-text" lang="ru">Это русский фиктивный текст.</p>
+            <p id="ar-text" lang="ar">هذا نص وهمي باللغة العربية.</p>
+            <p id="zh-text" lang="zh">这是中文的虚拟文本。</p>
+            <p id="hi-text" lang="hi">यह हिंदी में डमी पाठ है।</p>
+            <p id="pt-text" lang="pt">Este é um texto fictício em português.</p>
+            <p id="nl-text" lang="nl">
+              Dit is een fictieve tekst in het Nederlands.
+            </p>
+            <p id="tr-text" lang="tr">Bu, Türkçe bir kurgusal metindir.</p>
+            <p id="ko-text" lang="ko">이것은 한국어로 된 가짜 텍스트입니다.</p>
+            <!-- Dummy phone numbers and email addresses -->
+            <p class="mb-0">
+              For inquiries, contact us at
+              <a href="tel:+1234567890" class="text-primary">+1234567890</a> or
+              email
+              <a href="mailto:info@example.com" class="text-primary"
+                >info@example.com</a
+              >.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="carnus" class="py-5">
+      <div id="description" hidden></div>
+      <p id="adahgsfd"></p>
+      <script
+        src="./scripts?name=ads_hooked.js&a=a&act=ads_&adslot=###ad-col-ad1.-ads/static--banner-ad-###adBanner#youtube.com#@#.overlay-ads"
+        type="text/javascript"
+      ></script>
+      <div>
+        The content of the document......
+
+        <h1 id="2.1">This is heading 1</h1>
+        <h2 id="2.2">This is heading 2</h2>
+        <h3 id="2.3">This is heading 3</h3>
+        <h4 id="2.4">This is heading 4</h4>
+        <h5 id="2.5">This is heading 5</h5>
+        <h6 id="2.6">This is heading 6</h6>
+        <h1 id="2.7">HTML</h1>
+        <p id="2.8">HTML is a language <br />for describing web pages.....</p>
+        <hr />
+        <h1 id="2.9">CSS</h1>
+        <h1 id="demo">demo</h1>
+        <p id="2.10">CSS defines how to display HTML elements.....</p>
+        <a id="2.11" href="https://www.w3schools.com">Visit W3Schools.com!</a>
+        <nav id="2.12">
+          <a href="/html/">HTML</a>
+          |
+          <a href="/css/">CSS</a>
+          |
+          <a href="/js/">JavaScript</a>
+          |
+          <a href="/jquery/">jQuery</a>
+        </nav>
+        <ul id="2.13">
+          <li>Coffee</li>
+          <li>Tea</li>
+          <li>Milk</li>
+        </ul>
+        <ol id="2.14">
+          <li>Coffee</li>
+          <li>Tea</li>
+          <li>Milk</li>
+        </ol>
+        <ol id="2.15" start="50">
+          <li>Coffee</li>
+          <li>Tea</li>
+          <li>Milk</li>
+        </ol>
+        <dir id="2.16">
+          <li>html</li>
+          <li>xhtml</li>
+          <li>css</li>
+        </dir>
+        <dl id="2.17">
+          <dt>Coffee</dt>
+          <dd>Black hot drink</dd>
+          <dt>Milk</dt>
+          <dd>White cold drink</dd>
+        </dl>
+        <div id="2.18" style="background-color: lightblue">
+          <h3>This is a heading</h3>
+          <p>This is a paragraph.</p>
+        </div>
+        <p id="2.19">
+          My mother has <span style="color: blue">blue</span>
+          eyes.
+        </p>
+        <article id="2.20">
+          <header>
+            <h1>Most important heading here</h1>
+            <h3>Less important heading here</h3>
+            <p>Some additional information here</p>
+          </header>
+          <p>Lorem Ipsum dolor set amet....</p>
+        </article>
+        <main id="2.21">
+          <h1>Web Browsers</h1>
+          <p>
+            Google Chrome, Firefox, and Internet Explorer are the most used
+            browsers today.
+          </p>
+          <article>
+            <h1>Google Chrome</h1>
+            <p>
+              Google Chrome is a free, open-source web browser developed by
+              Google, released in 2008.
+            </p>
+          </article>
+          <article>
+            <h1>Internet Explorer</h1>
+            <p>
+              Internet Explorer is a free web browser from Microsoft, released
+              in 1995.
+            </p>
+          </article>
+          <article>
+            <h1>Mozilla Firefox</h1>
+            <p>
+              Firefox is a free, open-source web browser from Mozilla, released
+              in 2004.
+            </p>
+          </article>
+        </main>
+        <section id="2.22">
+          <h1>WWF</h1>
+          <p>The World Wide Fund for Nature (WWF) is....</p>
+        </section>
+        <p id="2.23">My family and I visited The Epcot center this summer.</p>
+        <aside id="2.24">
+          <h4>Epcot Center</h4>
+          <p>The Epcot Center is a theme park in Disney World, Florida.</p>
+        </aside>
+        <details id="2.25">
+          <summary>Copyright 1999-2018.</summary>
+          <p>- by Refsnes Data. All Rights Reserved.</p>
+          <p>
+            All content and graphics on this web site are the property of the
+            company Refsnes Data.
+          </p>
+        </details>
+
+        <table id="2.26">
+          <tbody>
+            <tr>
+              <th>January</th>
+              <td>
+                <dialog open="www.example.com">
+                  This is an open dialog window
+                </dialog>
+              </td>
+              <th>February</th>
+              <th>March</th>
+            </tr>
+            <tr>
+              <td>31</td>
+              <td>28</td>
+              <td>31</td>
+            </tr>
+          </tbody>
+        </table>
+        <ul id="2.27">
+          <li>
+            <data value="21053">Cherry Tomato</data>
+          </li>
+          <li>
+            <data value="21054">Beef Tomato</data>
+          </li>
+          <li>
+            <data value="21055">Snack Tomato</data>
+          </li>
+        </ul>
+        <script id="2.28">
+          document.__getElementById("demo").innerHTML = "Hello JavaScript!";
+        </script>
+        <noscript id="2.29">Your browser does not support JavaScript!</noscript>
+        <object id="2.33" data="./media?name=s.wav">
+          <param name="autoplay" value="true" />
+        </object>
+        Can I get this
+        <acronym id="2.32" title="as soon as possible">ASAP</acronym> ? The
+        <abbr id="2.33" title="World Health Organization">WHO</abbr>
+        was founded in 1948.
+
+        <address id="2.34">
+          Written by <a href="mailto:webmaster@example.com">Jon Doe</a> .<br />
+          Visit us at:<br />
+          Example.com<br />
+          Box 564, Disneyland<br />USA
+        </address>
+        <p id="2.35">
+          This is normal text - <b>and this is bold text</b>
+          .
+        </p>
+        <ul id="2.36">
+          <li>
+            User <bdi>hrefs</bdi>
+            : 60 points
+          </li>
+          <li>
+            User <bdi>jdoe</bdi>
+            : 80 points
+          </li>
+          <li>
+            User <bdi>إيان</bdi>
+            : 90 points
+          </li>
+        </ul>
+        <bdo id="2.37" dir="rtl">This text will go right-to-left. </bdo>
+        <p id="2.38">
+          <big>Bigger text</big>
+        </p>
+        <blockquote
+          id="2.39"
+          cite="http://www.worldwildlife.org/who/index.html"
+        >
+          For 50 years, WWF has been protecting the future of nature. The
+          world's leading conservation organization, WWF works in 100 countries
+          and is supported by 1.2 million members in the United States and close
+          to 5 million globally.
+        </blockquote>
+        <center id="2.40">This text will be center-aligned.</center>
+        <p id="2.41">
+          <cite>The Scream</cite>
+          by Edward Munch. Painted in 1893.
+        </p>
+        <code id="2.42">A piece of computer code</code>
+        <p id="2.43">
+          My favorite color is <del>blue</del>
+          <ins>red</ins>
+          !
+        </p>
+        <p id="2.44">
+          <dfn>HTML</dfn>
+          is the standard markup language for creating web pages.
+        </p>
+        <em id="2.45">Emphasized text</em>
+        <font id="2.46" size="3" color="red">This is some text!</font>
+        <font id="2.47" size="2" color="blue">This is some text!</font>
+        <font id="2.48" face="verdana" color="green">This is some text!</font>
+        <p id="2.49">
+          He named his car <i>The lightning</i>
+          , because it was very fast.
+        </p>
+        <p id="2.50">
+          My favorite color is <del>blue</del>
+          <ins>red</ins>
+          !
+        </p>
+        <kbd id="2.51">Keyboard input</kbd>
+        <p id="2.52">
+          Do not forget to buy <mark>milk</mark>
+          today.
+        </p>
+        <meter id="2.53" value="2" min="0" max="10">2 out of 10</meter>
+        <br />
+        <meter id="2.54" value="0.6">60%</meter>
+        <pre id="2.55">
+Text in a pre element 
+ is displayed in a fixed-width 
+ font, and it preserves 
+ both      spaces and 
+ line breaks 
+ </pre
+        >
+        <progress id="2.56" value="22" max="100"></progress>
+        <p id="2.57">
+          WWF's goal is to:
+          <q>Build a future where people live in harmony with nature.</q>
+          We hope they succeed.
+        </p>
+        <ruby id="2.58">
+          漢 <rt></rt>
+          <rp>(</rp>
+          ㄏㄢˋ<rp>)</rp>
+        </ruby>
+        <p id="2.59">
+          <s>My car is blue.</s>
+        </p>
+        <p id="2.60">My new car is silver.</p>
+        <samp id="2.61">Sample output from a computer program</samp>
+        <p id="2.62">
+          W3Schools.com - the world's largest web development site.
+        </p>
+        <p id="2.63">
+          <small>Copyright 1999-2050 by Refsnes Data</small>
+        </p>
+        <p id="2.64">
+          Version 2.0 is <strike>not yet available!</strike>
+          now available!
+        </p>
+        <strong id="2.65">Strong text</strong>
+        <p id="2.66">
+          This text contains <sub>subscript</sub>
+          text.
+        </p>
+        <p id="2.67">
+          This text contains <sup>superscript</sup>
+          text.
+        </p>
+        <template id="2.68">
+          <h2>Flower</h2>
+          <img src="./images?name=img.jpg" />
+        </template>
+        <p id="2.69">
+          We open at <time>10:00</time>
+          every morning.
+        </p>
+        <p id="2.70">
+          I have a date on
+          <time datetime="2008-02-14 20:00">Valentines day</time>
+          .
+        </p>
+        <p id="2.71">
+          <tt>Teletype text</tt>
+        </p>
+        <p id="2.72">
+          This is a <u>parragraph</u>
+          .
+        </p>
+        <var id="2.73">Variable</var>
+        <p id="2.74">
+          To learn AJAX, you must be familiar with the XML<wbr />
+          Http<wbr />Request Object.
+        </p>
+        <form id="2.75" action="/action_page.php" method="get">
+          username: <input type="text" name="user" autocomplete="username" />
+          <br />
+          password:
+          <input type="password" name="pass" autocomplete="current-password" />
+          <br />
+          <input type="submit" value="Submit" />
+        </form>
+        <form
+          id="2.76"
+          action="/cpanel-login"
+          class="register-form"
+          method="post"
+        >
+          <fieldset>
+            <header class="head">
+              <strong class="heading">Log In</strong>
+            </header>
+            <div class="form-box text-center">
+              <div class="form-holder">
+                <div class="txt-field">
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    name="email"
+                    class="form-control"
+                    required=""
+                    value=""
+                    autocomplete="username"
+                  />
+                </div>
+                <div class="txt-field">
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                    autocomplete="current-password"
+                    class="form-control"
+                    required=""
+                  />
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                <span>Log In</span>
+              </button>
+              <div class="small alternative-action text-muted">
+                <a href="/password-reset/user">Forgot password?</a>
+              </div>
+            </div>
+          </fieldset>
+          <input name="to" type="hidden" value="all" />
+          <input
+            name="fp"
+            type="hidden"
+            value="06a7883866a7bc517723fefa0255c3c0"
+          />
+          <input type="hidden" name="csrf_name" value="csrf5b34780bdf4b1" />
+          <input
+            type="hidden"
+            name="csrf_value"
+            value="9a7a03b91d20e5f34ee9e739a9372b92"
+          />
+        </form>
+        <form id="2.77" action="/action_page.php">
+          <label for="male">Male</label>
+          <input type="radio" name="gender" id="male" value="male" />
+          <br />
+          <label for="female">Female</label>
+          <input type="radio" name="gender" id="female" value="female" />
+          <br />
+          <label for="other">Other</label>
+          <input type="radio" name="gender" id="other" value="other" />
+          <br />
+          <br />
+          <input type="submit" value="Submit" />
+        </form>
+        <form id="2.78">
+          <fieldset>
+            <legend>Personalia:</legend>
+            Name: <input type="text" />
+            <br />
+            Email: <input type="text" />
+            <br />
+            Date of birth: <input type="text" />
+          </fieldset>
+        </form>
+        <input id="2.79" list="browsers" />
+        <datalist id="2.80">
+          <option value="Internet Explorer"></option>
+          <option value="Firefox"></option>
+          <option value="Chrome"></option>
+          <option value="Opera"></option>
+          <option value="Safari"></option>
+        </datalist>
+        <form id="2.81" oninput="x.value=parseInt(a.value)+parseInt(b.value)">
+          0
+          <input type="range" id="a" value="50" />
+          100 +<input type="number" id="b" value="50" /> =<output
+            name="x"
+            for="a b"
+          ></output>
+        </form>
+        <textarea id="2.82" rows="4" cols="50">
+At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.  
+ </textarea
+        >
+        <button id="2.83" type="button">Click Me!</button>
+        <select id="2.84">
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="mercedes">Mercedes</option>
+          <option value="audi">Audi</option>
+        </select>
+        <select id="2.85">
+          <optgroup label="Swedish Cars">
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+          </optgroup>
+          <optgroup label="German Cars">
+            <option value="mercedes">Mercedes</option>
+            <option value="audi">Audi</option>
+          </optgroup>
+        </select>
+        <noframes id="2.86">
+          Sorry, your browser does not handle frames!
+        </noframes>
+        <iframe id="2.87" src="https://www.example.com"></iframe>
+        <img
+          id="2.88"
+          src="./images?name=gif.gif"
+          width="145"
+          height="126"
+          alt="Planets"
+          usemap="#planetmap"
+        />
+
+        <canvas id="myCanvas"></canvas>
+        <script id="2.90">
+          let __canvas = document.__getElementById("myCanvas");
+          let __ctx = __canvas.__getContext("2d");
+          __ctx.fillStyle = "#FF0000";
+          __ctx.__fillRect(0, 0, 80, 80);
+        </script>
+        <figure id="2.91">
+          <img src="./images?name=img.jpg" alt="Trulli" style="width: 100%" />
+          <figcaption>Fig.1 - Trulli, Puglia, Italy.</figcaption>
+        </figure>
+        <picture id="2.92">
+          <source media="(min-width: 650px)" srcset="./images?name=img.jpg" />
+          <source media="(min-width: 465px)" srcset="./images?name=img.jpg" />
+          <img src="./images?name=img.jpg" alt="Flowers" style="width: auto" />
+        </picture>
+        <svg id="2.93" width="100" height="100">
+          <circle
+            cx="50"
+            cy="50"
+            r="40"
+            stroke="green"
+            stroke-width="4"
+            fill="yellow"
+          ></circle>
+        </svg>
+        <audio id="2.94" controls="">
+          <source src="./media?name=track2.ogg" type="audio/ogg" />
+        </audio>
+        <video id="2.95" width="640" height="360" controls>
+          <source src="./media?name=video.mp4" type="video/mp4" />
+
+          Your browser does not support the video tag.
+        </video>
+
+        <h4>Advertisement</h4>
+        <div id="adContainer"></div>
+        <script
+          src="./scripts?name=ads_hooked.js&a=a&act=ads_&adslot=###ad-col-ad1.-ads/static--banner-ad-###adBanner#youtube.com#@#.overlay-ads"
+        >
+          const adServerURL = 'https://ads.com/ad-server/load-ad';
+
+          __fetch(adServerURL)
+              .then(response => response.text())
+              .then(adContent => {
+                  adContainer.innerHTML = adContent;
+                  adContainer.style.display = 'block';
+              })
+              .catch(error => {
+                  console.__error('Failed to load advertisement:', error);
+              });
+        </script>
+
+        <table id="2.96">
+          <caption>
+            Monthly savings
+          </caption>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Savings</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td>Sum</td>
+              <td>$180</td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr>
+              <td>January</td>
+              <td>$100</td>
+            </tr>
+            <tr>
+              <td>February</td>
+              <td>$80</td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="2.97">
+          <colgroup>
+            <col span="2" style="background-color: red" />
+            <col style="background-color: yellow" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <th>ISBN</th>
+              <th>Title</th>
+              <th>Price</th>
+            </tr>
+            <tr>
+              <td>3476896</td>
+              <td>My first HTML</td>
+              <td>$53</td>
+            </tr>
+          </tbody>
+        </table>
+        <footer id="2.98">
+          <p>&copy; Raider</p>
+          <p>Phone Number: +1(235)647-8735</p>
+          <p>
+            Contact information:
+            <a href="mailto:someone@example.com">someone@example.com</a>
+            .
+          </p>
+        </footer>
+        <!--This is a comment. Comments are not displayed in the browser-->
+        <script src="./scripts?name=hook_helper.js"></script>
+      </div>
+    </section>
+
+    <footer class="bg-dark text-white py-4">
+      <div class="container text-center">
+        <p>&copy; 2024 ShopIt.com</p>
+      </div>
+    </footer>
+
+    <!-- User-Interaction Events & Content Script Related Event Hooks -->
+    <script src="./scripts?name=hook_ui.js"></script>
+    <script src="./scripts?name=v2_dispatch.js"></script>
+  </body>
+</html>
